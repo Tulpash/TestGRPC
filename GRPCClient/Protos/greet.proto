@@ -1,0 +1,63 @@
+syntax = "proto3";
+option csharp_namespace = "GRPCClient";
+package greet;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+service Greeter {
+	rpc SayHello (HelloRequest) returns (HelloReply);
+	rpc GetNames (People) returns (Names);
+	rpc GetMessages (google.protobuf.Int32Value) returns (stream google.protobuf.StringValue);
+}
+
+service Image {
+	rpc Upload (stream UploadImage) returns (stream AckImage);
+}
+
+//For hello
+message HelloRequest {
+	string name = 1;
+}
+
+message HelloReply {
+	string message = 1;
+}
+
+//For my
+message Person {
+	int32 id = 1;
+	string name = 2;
+	string email = 3;
+	google.protobuf.Timestamp date = 4; 
+	repeated Phone phones = 5;
+
+	enum PhoneType {
+		HOME = 0;
+		WORK = 1;
+		MOBILE = 2;
+	}
+
+	message Phone {
+		string number = 1;
+		PhoneType type = 2;
+	}
+}
+
+message People {
+	repeated Person people = 1;
+}
+
+message Names {
+	repeated string names = 1;
+}
+
+//For image
+message UploadImage {
+	bytes Content = 1;
+	int32 Id = 2;
+}
+
+message AckImage {
+	int32 Id = 1;
+}
